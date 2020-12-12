@@ -1,5 +1,6 @@
 body {
   box-sizing: border-box;
+  font-family: Arial, sans-serif;
 }
 
 .container {
@@ -18,12 +19,18 @@ body {
   margin-top: 20px;
 }
 
+.task-list {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 .task-column {
   min-height: calc(100vh - 50px);
   width: 30%;
   border: 1px solid black;
-  border-radius: 25px;
-  position: relative;
+  border-radius: 5px;
 }
 
 .task-column:nth-child(odd) {
@@ -34,10 +41,16 @@ body {
   margin: 0;
   padding: 0;
   padding: 10px;
+  text-transform: uppercase; 
+}
+
+.main-task-header {
+  display: flex;
+  justify-content: space-between;
 }
 
 .add {
-  position: absolute;
+  /* position: absolute; */
   top: 10px;
   right: 10px;
   width: 30px;
@@ -63,14 +76,24 @@ body {
   padding: 10px;
   padding-top: 25px;
   position: relative;
+  margin: 0 auto;
   background-color: white;
   list-style-type: none;
   width: 80%;
   box-shadow: 5px 5px 10px rgba(0,0,0,0.5);
-  border-radius: 10px;
+  border-radius: 5px;
   font-size: 20px;
   margin-bottom: 15px;
+  
   word-break:break-all;
+}
+
+.task-list-element.dragged {
+  position: absolute;
+  z-index: 999;
+  pointer-events: none;
+  box-shadow: 8px 8px 15px rgba(0,0,0,0.5);
+  transform: rotate(-4deg);
 }
 
 .task-delete {
@@ -79,6 +102,10 @@ body {
   right: 10px;
   font-size: 15px;
   cursor: pointer;
+}
+
+.hide-task-delete {
+  opacity: 0;
 }
 
 
@@ -101,9 +128,14 @@ body {
   background-color: #fff;
   border-radius: 20px;
   width: 500px;
-  height: 500px;
+  height: 550px;
   text-align: center;
   position: relative;
+}
+
+.popup-form-error {
+  color: red;
+  height: 20px;
 }
 
 .popup-form textarea {
@@ -126,7 +158,6 @@ body {
   background-color: rgba(171, 171, 171, 1); 
   color: white;
   outline: none;
-  margin-top: 5px;
   transition: all .5s;
 }
 
