@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-use-before-define */
 /* eslint-disable no-restricted-globals */
 const addBtn = document.querySelector('.add');
 const popUp = document.querySelector('.popup');
@@ -8,7 +10,6 @@ const tasksList = document.querySelector('.tasks-list');
 const tasksLists = Array.from(document.querySelectorAll('.task-list'));
 const panel = document.querySelector('.tasks');
 let draggedEl = null;
-let ghostEl = null;
 let infoEl;
 
 function panelDragEnd() {
@@ -19,15 +20,6 @@ function panelDragEnd() {
 
   panel.removeEventListener('mouseup', panelDragEnd);
   panel.removeEventListener('mousemove', panelDrag);
-}
-
-function checkTopItem() {
-  const items = Array.from(document.querySelectorAll('task-list-element'));
-  items.forEach((item) => {
-    if (item.style.top) {
-      item.style.top = 0 + 'px';
-    }
-  });
 }
 
 function panelDrag(e) {
@@ -42,7 +34,6 @@ function itemDragEnd(e) {
   if (!draggedEl) {
     return;
   }
-  console.log(e);
   if (event.target.classList.contains('task-list')) {
     event.target.appendChild(draggedEl);
     draggedEl.style = '';
@@ -58,7 +49,6 @@ function itemDragEnd(e) {
     return;
   }
   document.querySelector('body').style.cursor = 'auto';
-  return;
 }
 
 tasksLists.forEach((item) => {
