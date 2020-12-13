@@ -10,6 +10,7 @@ const tasksList = document.querySelector('.tasks-list');
 const tasksLists = Array.from(document.querySelectorAll('.task-list'));
 const panel = document.querySelector('.tasks');
 let draggedEl = null;
+let ghostEl = null;
 let infoEl;
 
 function panelDragEnd() {
@@ -28,6 +29,30 @@ function panelDrag(e) {
   }
   draggedEl.style.left = `${e.clientX - infoEl.offsetX}px`;
   draggedEl.style.top = `${e.clientY - infoEl.offsetY}px`;
+  if (e.target.classList.contains('task-list-element')) {
+    if (e.target === draggedEl) {
+      return;
+    }
+    if (ghostEl === null) {
+      ghostEl = document.createElement('div');
+      ghostEl.classList.add('ghost');
+      ghostEl.style.height = `${draggedEl.offsetHeight}px`;
+      ghostEl.style.width = `${draggedEl.offsetWidth}px`;
+      if ((e.target.offsetHeight / 2 - e.layerY) >= 0) {
+        e.target.parentNode.insertBefore(ghostEl, e.target);
+        return;
+      }
+      e.target.insertAdjacentElement('afterEnd', ghostEl);
+    }
+  } else {
+    if (e.target === ghostEl) {
+      return;
+    }
+    if (ghostEl !== null) {
+      ghostEl.parentNode.removeChild(ghostEl);
+      ghostEl = null;
+    }
+  }
 }
 
 function itemDragEnd(e) {
@@ -39,14 +64,30 @@ function itemDragEnd(e) {
     draggedEl.style = '';
     draggedEl.classList.remove('dragged');
     document.querySelector('body').style.cursor = 'auto';
+    draggedEl = null;
     return;
   }
   if (event.target.classList.contains('task-list-element')) {
-    event.target.parentNode.insertBefore(draggedEl, event.target);
+    if ((e.target.offsetHeight / 2 - e.layerY) >= 0) {
+      event.target.parentNode.insertBefore(draggedEl, event.target);
+      return;
+    }
+    e.target.insertAdjacentElement('afterEnd', draggedEl);
+    if (ghostEl !== null) {
+      ghostEl.parentNode.removeChild(ghostEl);
+    }
     draggedEl.style = '';
     draggedEl.classList.remove('dragged');
-    document.querySelector('body').style.cursor = 'auto';
+    draggedEl = null;
+    ghostEl = null;
     return;
+  }
+  if (event.target.classList.contains('ghost')) {
+    ghostEl.parentNode.replaceChild(draggedEl, ghostEl);
+    draggedEl.classList.remove('dragged');
+    draggedEl.style = '';
+    draggedEl = null;
+    ghostEl = null;
   }
   document.querySelector('body').style.cursor = 'auto';
 }
